@@ -27,7 +27,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  // "proxy": "https://watchman.ktfootball.com",
+  "proxy": "https://watchman.ktfootball.com",
   "devDependencies": {
     "gh-pages": "^2.0.1"
   }
