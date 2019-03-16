@@ -38,3 +38,7 @@
   height: 60px;
   border-radius: 50%;
 }
+
+.ant-modal-footer {
+  display: none;
+}

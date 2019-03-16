@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Table, Select } from 'antd';
+import { Table, Select, Spin } from 'antd';
 import './App.css';
+import Assessment from './Assessment';
+
 const columns = [{
+  title: '序号',
+  dataIndex: 'key',
+  key: 'key',
+},{
   title: '头像',
   dataIndex: 'avatar',
  key: 'avatar',
@@ -15,6 +21,9 @@ const columns = [{
   title: '班级',
   dataIndex: 'grade_cn',
   key: 'grade_cn',
+  render: (text, record) => (
+    <span>{`${text}${record.cls_cn}`}</span>
+  )
 }, {
   title: '黄(态度)',
   dataIndex: 'attitude_level',
@@ -47,10 +56,16 @@ class App extends Component {
    data: [],
    classList: [],
    lessonList: [],
-   periodList: []
+   periodList: [],
+   loading: true
   }
  }
 
+ componentDidMount() {
+  this.loadData()
+ }
+
+// 请求全校排行榜
  loadData = () => {
   axios({
    method: 'get',
@@ -60,7 +75,7 @@ class App extends Component {
    let list = res.data.data.map((item, index) => {
      return {
       ...item,
-      key: index
+      key: index + 1
      }
    })
    this.setState({
@@ -69,7 +84,7 @@ class App extends Component {
   })
  }
 
-
+// 请求班级
  loadClassData = () => {
   axios({
    method: 'get',
@@ -85,12 +100,14 @@ class App extends Component {
   })
  }
 
+ // 请求课程
  loadLessData = (value) => {
   axios({
    method: 'get',
    url: `/kt-school/api/v5/classrooms/${value}/lessons?app_key=c196b0fe9794&limit=0`
   }).then((res) => {
-   let lessonList = res.data.data.map((item, index) => {
+    this.loadPeriodData(res.data.data[0].id)
+    let lessonList = res.data.data.map((item, index) => {
     return {
      ...item,
      key: index
@@ -100,8 +117,35 @@ class App extends Component {
   })
  }
 
- componentDidMount() {
-  this.loadData()
+ // 请求课时
+ loadPeriodData = (value) => {
+  axios({
+    method: 'get',
+    url: `/kt-school/api/v5/lessons/${value}/lesson_periods?app_key=c196b0fe9794&limit=0`
+   }).then((res) => {
+    let periodList = res.data.data.map((item, index) => {
+     return {
+      ...item,
+      key: index
+     }
+    })
+    this.setState({ periodList })
+   })
+ }
+ // 请求课时排行榜
+ loadPeriodRankData = (value) => {
+  axios({
+    method: 'get',
+    url: `/kt-school/api/v5/lesson_periods/${value}/performance_rank?app_key=c196b0fe9794&limit=0`
+   }).then((res) => {
+    let list = res.data.data.map((item, index) => {
+     return {
+      ...item,
+      key: index
+     }
+    })
+    this.setState({ data: list })
+   })
  }
 
  handleClassChange = (value) => {
@@ -109,21 +153,14 @@ class App extends Component {
  }
 
 
- handleLessonChange = (value) => {
-  axios({
-   method: 'get',
-   url: `/kt-school/api/v5/classrooms/${value}/lessons?app_key=c196b0fe9794&limit=0`
-  }).then((res) => {
-   let periodList = res.data.data.map((item, index) => {
-    return {
-     ...item,
-     key: index
-    }
-   })
-   this.setState({ periodList })
-  })
-
+ handlePeriodChange = (value) => {
+  this.loadPeriodData(value)
  }
+
+ handleRankChange = (value) => {
+   this.setState({ loading: true });
+   this.loadPeriodRankData(value)
+ } 
 
  handleChange = (value) => {
   value === '学校' && this.loadData()
@@ -141,7 +178,7 @@ class App extends Component {
      this.state.classList.length > 0 ? 
       <Select defaultValue={`${this.state.classList[0].grade_cn} ${this.state.classList[0].cls_cn}`} onChange={this.handleClassChange}>
        {
-        this.state.classList.map((item, index) => <Option key={item.id}>{`${item.grade_cn} ${item.cls_cn}`}</Option>)
+        this.state.classList.map((item, index) => <Option value={item.id} key={item.id}>{`${item.grade_cn} ${item.cls_cn}`}</Option>)
        }
       </Select> : <div></div>
     }
@@ -149,14 +186,27 @@ class App extends Component {
 
     {
      this.state.lessonList.length > 0 ? 
-      <Select defaultValue={this.state.lessonList[0].name} onChange={this.handleLessonChange}>
+      <Select defaultValue={this.state.lessonList[0].name} onChange={this.handlePeriodChange}>
        {
-        this.state.lessonList.map((item, index) => <Option key={item.name}>{item.name}</Option>)
+        this.state.lessonList.map((item, index) => <Option value={item.id} key={item.id}>{item.name}</Option>)
+       }
+      </Select> : <div></div>
+    }
+
+    {
+     this.state.periodList.length > 0 ? 
+      <Select defaultValue={this.state.periodList[0].name} onChange={this.handleRankChange}>
+       {
+        this.state.periodList.map((item, index) => <Option value={item.id} key={item.id}>{item.name}</Option>)
        }
       </Select> : <div></div>
     }
 
     <Table className='table' columns={columns} dataSource={this.state.data} />
+    {/* <Spin spinning={this.state.loading}></Spin> */}
+
+    <Assessment />>
+
    </div>
   )
  }
