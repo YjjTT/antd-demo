@@ -37,7 +37,7 @@ handleSkillChange = (value) => {
 loadData = (value) => {
     axios({
      method: 'get',
-     url: `/kt-school/api/v5/schools/11/skills/${value}/assessment_rank?app_key=c196b0fe9794&limit=0`
+     url: `https://watchman.ktfootball.com/kt-school/api/v5/schools/11/skills/${value}/assessment_rank?app_key=c196b0fe9794&limit=0`
     }).then((res) => {
      console.log(res.data)
      let list = res.data.data.map((item, index) => {
@@ -55,7 +55,7 @@ loadData = (value) => {
 loadSkillData = () => {
     axios({
         method: 'get',
-        url: '/kt-school/api/v6/assessments/schools/11/skills?app_key=c196b0fe9794&limit=0'
+        url: 'https://watchman.ktfootball.com/kt-school/api/v6/assessments/schools/11/skills?app_key=c196b0fe9794&limit=0'
        }).then((res) => {
            this.setState({skillId: res.data.data[0].id})
         this.loadData(res.data.data[0].id)
@@ -72,7 +72,7 @@ loadSkillData = () => {
 loadClassData = () => {
     axios({
      method: 'get',
-     url: '/kt-school/api/v5/schools/11/classrooms?app_key=c196b0fe9794&limit=0'
+     url: 'https://watchman.ktfootball.com/kt-school/api/v5/schools/11/classrooms?app_key=c196b0fe9794&limit=0'
     }).then((res) => {
      let classList = res.data.data.map((item, index) => {
       return {
@@ -87,7 +87,7 @@ loadClassData = () => {
 loadRankData = (value) => {
     axios({
         method: 'get',
-        url: `/kt-school/api/v5/classrooms/${value}/skills/${this.state.skillId}/assessment_rank?app_key=c196b0fe9794&limit=0`
+        url: `https://watchman.ktfootball.com/kt-school/api/v5/classrooms/${value}/skills/${this.state.skillId}/assessment_rank?app_key=c196b0fe9794&limit=0`
        }).then((res) => {
         let list = res.data.data.map((item, index) => {
          return {

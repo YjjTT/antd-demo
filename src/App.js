@@ -69,7 +69,7 @@ class App extends Component {
  loadData = () => {
   axios({
    method: 'get',
-   url: '/kt-school/api/v5/schools/181/performance_rank?app_key=c196b0fe9794&limit=0'
+   url: 'https://watchman.ktfootball.com/kt-school/api/v5/schools/181/performance_rank?app_key=c196b0fe9794&limit=0'
   }).then((res) => {
    console.log(res.data)
    let list = res.data.data.map((item, index) => {
@@ -88,7 +88,7 @@ class App extends Component {
  loadClassData = () => {
   axios({
    method: 'get',
-   url: '/kt-school/api/v5/schools/181/classrooms?app_key=c196b0fe9794&limit=0'
+   url: 'https://watchman.ktfootball.com/kt-school/api/v5/schools/181/classrooms?app_key=c196b0fe9794&limit=0'
   }).then((res) => {
    let classList = res.data.data.map((item, index) => {
     return {
@@ -104,7 +104,7 @@ class App extends Component {
  loadLessData = (value) => {
   axios({
    method: 'get',
-   url: `/kt-school/api/v5/classrooms/${value}/lessons?app_key=c196b0fe9794&limit=0`
+   url: `https://watchman.ktfootball.com/kt-school/api/v5/classrooms/${value}/lessons?app_key=c196b0fe9794&limit=0`
   }).then((res) => {
     this.loadPeriodData(res.data.data[0].id)
     let lessonList = res.data.data.map((item, index) => {
@@ -121,7 +121,7 @@ class App extends Component {
  loadPeriodData = (value) => {
   axios({
     method: 'get',
-    url: `/kt-school/api/v5/lessons/${value}/lesson_periods?app_key=c196b0fe9794&limit=0`
+    url: `https://watchman.ktfootball.com/kt-school/api/v5/lessons/${value}/lesson_periods?app_key=c196b0fe9794&limit=0`
    }).then((res) => {
     let periodList = res.data.data.map((item, index) => {
      return {
@@ -136,7 +136,7 @@ class App extends Component {
  loadPeriodRankData = (value) => {
   axios({
     method: 'get',
-    url: `/kt-school/api/v5/lesson_periods/${value}/performance_rank?app_key=c196b0fe9794&limit=0`
+    url: `https://watchman.ktfootball.com/kt-school/api/v5/lesson_periods/${value}/performance_rank?app_key=c196b0fe9794&limit=0`
    }).then((res) => {
     let list = res.data.data.map((item, index) => {
      return {
