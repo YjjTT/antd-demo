@@ -1,5 +1,6 @@
 {
   "name": "antd-demo",
+  "homepage": "http://yjjtt.top/antd-demo/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,7 +14,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -24,5 +27,8 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "https://watchman.ktfootball.com"
+  "proxy": "https://watchman.ktfootball.com",
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }
